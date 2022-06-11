@@ -18,7 +18,7 @@ const mainNav = [
         path: "/catalog"
     },
     {
-        display: "Phụ kiện",
+        display: "Phụ kiệnn",
         path: "/accessories"
     }
 ]
