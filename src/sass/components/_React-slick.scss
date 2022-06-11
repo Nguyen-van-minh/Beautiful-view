@@ -1,0 +1,17 @@
+.slick-slider{
+    width: 90%;
+}
+
+.slick-slide img{
+    max-width: 90%;
+
+    &:hover{
+        border: 2px solid orange;
+    }
+}
+
+.slick-arrow  {
+    background-color: orange !important;
+}
+
+

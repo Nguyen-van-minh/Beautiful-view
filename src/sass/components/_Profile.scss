@@ -1,0 +1,32 @@
+.container-profile{
+    border: 1px solid #dde1ef;
+    border-radius: 8px;
+    position: relative;
+    width: 70%;
+    
+    &__upper{
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        height: 100px;
+        background-color: aqua;
+    }
+
+    &__icon{
+        position: absolute;
+        top:40px;
+        left: 40%;
+        background-color: aliceblue;
+        border: 1px;
+        border-radius: 50%;
+  
+    }
+
+    &__name{
+        margin-top: 20px;
+    }
+
+    &__button{
+        margin: 20px 0px 10px 0px;
+
+    }
+}

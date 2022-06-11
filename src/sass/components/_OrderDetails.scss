@@ -1,0 +1,23 @@
+.orderDetails{
+    margin-top: 20px;
+    width: 80%;
+    border-radius: 8px;
+    &__heading{
+        background-color: orange;
+        padding: 10px 0px 15px 10px;
+        border: 1px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    &__container{
+        margin: 30px 0px 20px 10px;
+    }
+    &__item{
+        margin: 3px;
+        &__title{
+            font-weight: bold;
+            margin-right: 15px;
+        }
+    }
+    
+}

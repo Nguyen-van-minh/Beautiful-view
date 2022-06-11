@@ -1,0 +1,31 @@
+.backgroun{
+    background: url("../../assets/images/bg_login-png.png") bottom center no-repeat;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.form-container{
+    background-color: white;
+    padding: 40px 60px;
+    margin-top: 65px;
+}
+
+.btn-login{
+    background-color: #fcaf17;
+    width: 100%;
+    height: 30px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.spin {
+    margin: 20px 0;
+    margin-bottom: 20px;
+    padding: 30px 50px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+  }
