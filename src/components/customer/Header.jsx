@@ -17,10 +17,6 @@ const mainNav = [
         display: "Sản phẩm",
         path: "/catalog"
     },
-    {
-        display: "Phụ kiệnn",
-        path: "/accessories"
-    }
 ]
 
 const Header = () => {

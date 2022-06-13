@@ -84,7 +84,7 @@ const AddReview = (props) => {
                     <br />
                     <label>Bình luận:</label>
                     <Input name='comment' value={comment} onChange={onChangeNewReview} />
-                    <Button type='primary' style={{ marginTop: 20 }} onClick={onSubmit}>Thêm</Button>
+                    <Button type='primary' style={{ marginTop: 20 }} onClick={onSubmit}>Đánh giá</Button>
                 </div>
             </Modal>
         </div>
