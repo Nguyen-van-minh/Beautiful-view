@@ -26,7 +26,7 @@ const ProductDetails = props => {
         setDateReview(
             reviews.filter(review => review?.productId === product?._id)
         )
-    }, [product])
+    }, [product, reviews])
 
     const getProducts = (count) => {
         const max = products?.length - count

@@ -7,10 +7,11 @@ import { Input, Button } from 'antd';
 import { useHistory } from 'react-router';
 import UserLocation from "./UserLocation";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import numberWithCommas from '../../utils/numberWithCommas'
 
 const OneOrderInformation = () => {
     const { authState: { user } } = useContext(AuthContext)
-    const { OrderState: { item }, addOrder, updateProductWhenOrder } = useContext(OrderContext)
+    const { OrderState: { item }, addOrder, updateProductWhenOrder, VNPAY } = useContext(OrderContext)
 
     const [newOrder, setNewOrder] = useState({
         userID: user?._id,
@@ -43,6 +44,7 @@ const OneOrderInformation = () => {
     const [cityId, setCityId] = useState(null)
     const [districtId, setDistrictId] = useState(null)
     const [wardsId, setWardsId] = useState(null)
+    const [phi, setPhi] = useState(0)
     const [paidFor, setPaidFor] = useState(false);
     const [error, setError] = useState(null);
 
@@ -63,14 +65,27 @@ const OneOrderInformation = () => {
     useEffect(() => {
         if (cityId !== null) {
             let districtData = data[cityId].Districts
+
             setA(data[cityId]?.Name)
             let resDistric = districtData?.map((item, index) => ({ value: index, label: item.Name }))
             setDictrict(resDistric)
             setDistrictId(null)
             setWardsId(null)
             setWards([])
+            if (cityId !== null) {
+                if (cityId === 0) {
+                    setPhi(15000)
+                } else if (cityId === 49) {
+                    setPhi(35000)
+                } else {
+                    setPhi(30000)
+                }
+            }
         }
+
     }, [cityId])
+
+
 
     useEffect(() => {
         if (districtId !== null) {
@@ -128,7 +143,11 @@ const OneOrderInformation = () => {
         event.preventDefault()
         const { success } = await addOrder(newOrder)
         await updateProductWhenOrder({ listId: [item.productId], listQuantity: [item.quantity] })
-        if (success) {
+        if (success && newOrder.payType === "VNPAY") {
+            const data = await VNPAY({ total: newOrder.total })
+            window.location.href = data.data
+        }
+        else if (success && newOrder.payType !== "VNPAY") {
             toast.success('🦄 Đặt hàng thành công!');
             history.push('/')
         }
@@ -215,7 +234,16 @@ const OneOrderInformation = () => {
                         {
                             validate ?
                                 <>
-                                    <h4>Chọn phương thức thanh toán:</h4>
+                                    <div style={{ marginBottom: "35px" }}>
+                                        <h5 style={{ marginBottom: '5px' }}>Đơn vị giao hàng</h5>
+                                        <div className="gh_tiet_kiem">
+                                        </div>
+                                        <span>
+                                            Phí giao hàng: {numberWithCommas(phi)} <span style={{ color: "green" }}>(miễn phí)</span>
+                                        </span>
+                                    </div>
+
+                                    <h5 style={{ marginBottom: '20px' }}>Chọn phương thức thanh toán:</h5>
                                     <div className="paypal-button-container">
                                         <PayPalButtons style={{
                                             layout: "horizontal",
@@ -251,10 +279,15 @@ const OneOrderInformation = () => {
                                                 // Display cancel message, modal or redirect user to cancel page or back to cart
                                             }}
                                         />
+
                                     </div>
 
+                                    <button onClick={() => setNewOrder({ ...newOrder, payType: "VNPAY" })} className="button-onsubmit-vnpay" type="submit">
+
+                                    </button>
+
                                     <button onClick={() => setNewOrder({ ...newOrder, payType: "COD" })} className="button-onsubmit" type="submit">
-                                        <span style={{ margin: 15, fontSize: 15 }}>Thanh toán khi nhận hàng</span>
+                                        <span style={{ margin: 15, fontSize: 15, color: "white" }}>Thanh toán khi nhận hàng</span>
                                     </button>
                                 </>
                                 :
@@ -268,6 +301,7 @@ const OneOrderInformation = () => {
                     <br />
                 </div>
             </form>
+
         </div>
     )
 }

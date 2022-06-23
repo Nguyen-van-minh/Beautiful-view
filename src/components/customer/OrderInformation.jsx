@@ -8,15 +8,17 @@ import { Button, Input } from 'antd';
 import { useHistory } from 'react-router';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import UserLocation from "./UserLocation";
+import numberWithCommas from '../../utils/numberWithCommas'
 
 const OrderInformation = () => {
     const { CartState: { items }, getAllItem, deleteAllItems } = useContext(CartContext)
     const { authState: { user } } = useContext(AuthContext)
-    const { addOrder, updateProductWhenOrder } = useContext(OrderContext)
+    const { addOrder, updateProductWhenOrder, VNPAY } = useContext(OrderContext)
 
     const [paidFor, setPaidFor] = useState(false);
     const [validate, setValidate] = useState(false)
     const [error, setError] = useState(null);
+    const [phi, setPhi] = useState(0)
 
     const [newOrder, setNewOrder] = useState({
         userID: user?._id,
@@ -83,6 +85,15 @@ const OrderInformation = () => {
             setDistrictId(null)
             setWardsId(null)
             setWards([])
+            if (cityId !== null) {
+                if (cityId === 0) {
+                    setPhi(15000)
+                } else if (cityId === 49) {
+                    setPhi(35000)
+                } else {
+                    setPhi(30000)
+                }
+            }
         }
     }, [cityId])
 
@@ -144,7 +155,12 @@ const OrderInformation = () => {
         event.preventDefault()
         const { success } = await addOrder(newOrder)
         await updateProductWhenOrder({ listId: newOrder.listProductId, listQuantity: newOrder.quantityProduct })
-        if (success) {
+        if (success && newOrder.payType === "VNPAY") {
+            const data = await VNPAY({ total: newOrder.total })
+            window.location.href = data.data
+            await deleteAllItems(user._id)
+        }
+        else if (success) {
             toast.success('🦄 Đặt hàng thành công!');
             await deleteAllItems(user._id)
             history.push('/')
@@ -233,7 +249,15 @@ const OrderInformation = () => {
                         {
                             validate ?
                                 <>
-                                    <h3>Chọn phương thức thanh toán:</h3>
+                                    <div style={{ marginBottom: "35px" }}>
+                                        <h5 style={{ marginBottom: '5px' }}>Đơn vị giao hàng</h5>
+                                        <div className="gh_tiet_kiem">
+                                        </div>
+                                        <span>
+                                            Phí giao hàng: {numberWithCommas(phi)} <span style={{ color: "green" }}>(miễn phí)</span>
+                                        </span>
+                                    </div>
+                                    <h5 style={{ marginBottom: '20px' }}>Chọn phương thức thanh toán:</h5>
                                     <div className="paypal-button-container">
                                         <PayPalButtons style={{
                                             layout: "horizontal",
@@ -271,8 +295,12 @@ const OrderInformation = () => {
                                         />
                                     </div>
 
+                                    <button onClick={() => setNewOrder({ ...newOrder, payType: "VNPAY" })} className="button-onsubmit-vnpay" type="submit">
+
+                                    </button>
+
                                     <button onClick={() => setNewOrder({ ...newOrder, payType: "COD" })} className="button-onsubmit" type="submit">
-                                        <span style={{ margin: 15, fontSize: 20 }}>Thanh toán khi nhận hàng</span>
+                                        <span style={{ margin: 15, fontSize: 15, color: "white" }}>Thanh toán khi nhận hàng</span>
                                     </button>
                                 </>
                                 :

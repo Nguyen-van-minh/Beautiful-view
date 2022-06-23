@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Rate } from 'antd';
 import moment from 'moment';
 import { Pagination } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { ReviewContext } from "../../contexts/ReviewContext";
+import { AuthContext } from '../../contexts/AuthContext'
+import { toast } from 'react-toastify';
 
 const Review = (props) => {
-
+    const { authState: { user } } = useContext(AuthContext)
+    const { deleteReview } = useContext(ReviewContext)
     const [currentPageReview, setCurentPageReview] = useState(1)
     const [start, setStart] = useState(0)
     const [end, setEnd] = useState(4)
     const perLoad = 4
-
 
 
     const handleChange = (page) => {
@@ -28,6 +32,20 @@ const Review = (props) => {
         }
         let poit = Math.round((num / mang.length) * 100) / 100
         return poit;
+    }
+
+    const handleDelete = (id) => {
+        if (window.confirm('Bạn muốn xóa bình luận này?')) {
+            const success = deleteReview(id)
+            console.log(success)
+            if (success) {
+                toast.success('🦄 Xóa bình luận thành công!');
+            }
+            else {
+                toast.error('Lỗi!');
+            }
+
+        }
     }
 
     return (
@@ -65,7 +83,22 @@ const Review = (props) => {
                                                 </div>
 
                                                 <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 20 }}>
-                                                    <span>{item.userName}</span>
+                                                    <div>
+                                                        <span>{item.userName}</span>
+                                                        {
+                                                            user?.role &&
+                                                            <DeleteOutlined style={{
+                                                                marginBottom: "5px",
+                                                                marginLeft: "10px",
+                                                                color: "red",
+                                                                cursor: "pointer"
+                                                            }}
+                                                                onClick={() => handleDelete(item._id)}
+                                                            />
+                                                        }
+
+                                                    </div>
+
                                                     <span>
                                                         <Rate disabled defaultValue={item.star} />
                                                     </span>
@@ -81,6 +114,7 @@ const Review = (props) => {
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 ))

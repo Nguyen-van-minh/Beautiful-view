@@ -19,6 +19,7 @@ const ProductView = props => {
     const { setItem } = useContext(OrderContext)
     const { authState: { user } } = useContext(AuthContext)
     const [show, setShow] = useState(false)
+    const [isShirt, setIsShirt] = useState(true)
 
     let product = props.product
     let images = props.images
@@ -59,6 +60,12 @@ const ProductView = props => {
     }
 
     useEffect(() => {
+        if (product.name.includes('Thắt lưng') || product.name.includes('Ví')) {
+            setIsShirt(false)
+        }
+        else {
+            setIsShirt(true)
+        }
         setPreviewImg(product.image)
         setQuantity(1)
         setColor(undefined)
@@ -119,7 +126,7 @@ const ProductView = props => {
             return false
         }
 
-        if (size === undefined) {
+        if (size === undefined && isShirt) {
             toast.error('Vui lòng chọn kích cỡ!');
             return false
         }
@@ -267,9 +274,6 @@ const ProductView = props => {
 
     return (
         <div className="product">
-
-
-
             <div className="product__images">
 
                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -329,106 +333,111 @@ const ProductView = props => {
                         }
                     </div>
                 </div>
+                {
+                    isShirt && <div className="product__info__item">
+                        <div className="product__info__item__title">
+                            Gợi ý chọn size
+                        </div>
+                        <div style={{ position: 'relative' }}>
 
-                <div className="product__info__item">
-                    <div className="product__info__item__title">
-                        Gợi ý chọn size
-                    </div>
-                    <div style={{ position: 'relative' }}>
-
-                        <span onClick={() => setShow(!show)} className="product__info__item__suport">Gợi ý {show ? <i className='bx bx-up-arrow'></i> : <i className='bx bx-down-arrow'></i>}</span>
-
-
-
-                        <span className="product__info__item__suport" onClick={showModal} >Bảng size chuẩn</span>
-                        <Modal title="Hướng dẫn chọn size chuẩn" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Size</th>
-                                        <th>Chiều cao</th>
-                                        <th>Cân nặng</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>M</td>
-                                        <td>Dưới 1m69</td>
-                                        <td>Dưới 65kg</td>
-                                    </tr>
-                                    <tr>
-                                        <td>L</td>
-                                        <td>1m70 - 1m74</td>
-                                        <td>66-70kg</td>
-                                    </tr>
-                                    <tr>
-                                        <td>XL</td>
-                                        <td>1m74 - 1m76</td>
-                                        <td>70-73kg</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2XL</td>
-                                        <td>1m74 - 1m77</td>
-                                        <td>73-76kg</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3XL</td>
-                                        <td>Trên 1m77</td>
-                                        <td>76-80kg</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <p>Người mẫu : 70kg - 1m70 size chuẩn XL</p>
-                            <p>Hơn 98% khách hàng đã chọn đúng size theo bảng chọn này.</p>
-                        </Modal>
+                            <span onClick={() => setShow(!show)} className="product__info__item__suport">Gợi ý {show ? <i className='bx bx-up-arrow'></i> : <i className='bx bx-down-arrow'></i>}</span>
 
 
-                        <div className={show ? 'size-chart' : 'size-chart__none'}>
-                            <div>
-                                <p>Chiều cao</p>
+
+                            <span className="product__info__item__suport" onClick={showModal} >Bảng size chuẩn</span>
+                            <Modal title="Hướng dẫn chọn size chuẩn" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Size</th>
+                                            <th>Chiều cao</th>
+                                            <th>Cân nặng</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>M</td>
+                                            <td>Dưới 1m69</td>
+                                            <td>Dưới 65kg</td>
+                                        </tr>
+                                        <tr>
+                                            <td>L</td>
+                                            <td>1m70 - 1m74</td>
+                                            <td>66-70kg</td>
+                                        </tr>
+                                        <tr>
+                                            <td>XL</td>
+                                            <td>1m74 - 1m76</td>
+                                            <td>70-73kg</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2XL</td>
+                                            <td>1m74 - 1m77</td>
+                                            <td>73-76kg</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3XL</td>
+                                            <td>Trên 1m77</td>
+                                            <td>76-80kg</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p>Người mẫu : 70kg - 1m70 size chuẩn XL</p>
+                                <p>Hơn 98% khách hàng đã chọn đúng size theo bảng chọn này.</p>
+                            </Modal>
+
+
+                            <div className={show ? 'size-chart' : 'size-chart__none'}>
                                 <div>
-                                    <input onChange={onChangeSuport("suportHeight")} value={suportValue.suportHeight} name='suportHeight' type='range' min='140' max='185' />
+                                    <p>Chiều cao</p>
+                                    <div>
+                                        <input onChange={onChangeSuport("suportHeight")} value={suportValue.suportHeight} name='suportHeight' type='range' min='140' max='185' />
+                                    </div>
+                                    <div>
+                                        {suportValue.suportHeight} Cm
+                                    </div>
                                 </div>
                                 <div>
-                                    {suportValue.suportHeight} Cm
+                                    <p>Cân nặng</p>
+                                    <div>
+                                        <input onChange={onChangeSuport("suportKg")} value={suportValue.suportKg} name='suportKg' type='range' min='45' max='80' />
+                                    </div>
+                                    <div>
+                                        {suportValue.suportKg} Kg
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <p>Cân nặng</p>
                                 <div>
-                                    <input onChange={onChangeSuport("suportKg")} value={suportValue.suportKg} name='suportKg' type='range' min='45' max='80' />
+                                    <p>
+                                        Gợi ý bạn
+                                        <span>{message}</span>
+                                    </p>
                                 </div>
-                                <div>
-                                    {suportValue.suportKg} Kg
-                                </div>
-                            </div>
-                            <div>
-                                <p>
-                                    Gợi ý bạn
-                                    <span>{message}</span>
-                                </p>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
 
-                <div className="product__info__item">
-                    <div className="product__info__item__title">
-                        Kích cỡ
+                {
+                    isShirt && <div className="product__info__item">
+                        <div className="product__info__item__title">
+                            Kích cỡ
+                        </div>
+                        <div className="product__info__item__list">
+                            {
+                                product.size.map((item, index) => (
+                                    <div key={index} className={`product__info__item__list__item ${size === item ? 'active' : ''}`} onClick={() => setSize(item)}>
+                                        <span className="product__info__item__list__item__size">
+                                            {item}
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
                     </div>
-                    <div className="product__info__item__list">
-                        {
-                            product.size.map((item, index) => (
-                                <div key={index} className={`product__info__item__list__item ${size === item ? 'active' : ''}`} onClick={() => setSize(item)}>
-                                    <span className="product__info__item__list__item__size">
-                                        {item}
-                                    </span>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
+                }
+
+
                 <div className="product__info__item">
                     <div className="product__info__item__title">
                         Số lượng

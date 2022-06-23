@@ -18,11 +18,11 @@ const OneOrder = () => {
                 <div className="main">
 
                     <div className="row">
-                        <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div className="col-xs-12 col-sm-5 col-md-5 col-lg-5">
 
                             <OneOrderListProduct />
                         </div>
-                        <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div className="col-xs-12 col-sm-7 col-md-7 col-lg-7">
                             <OneOrderInformation />
                         </div>
                     </div>

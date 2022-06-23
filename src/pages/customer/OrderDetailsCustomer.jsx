@@ -77,7 +77,7 @@ const OrderDetailsCustomer = () => {
                                     </div>
                                     <div style={{ paddingBottom: 20 }} className='orderDetails__item'>
                                         <span className='orderDetails__item__title'>Thanh toán:</span>
-                                        {order.payType === "PayPal" ? <span>payPal - Đã thanh toán</span> : <span>Thanh toán khi nhận hàng</span>}
+                                        <span>{order.payType} </span>
                                     </div>
                                 </div>
 

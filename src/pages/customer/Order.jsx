@@ -18,11 +18,11 @@ const Order = () => {
                 <div className="main">
 
                     <div className="row">
-                        <div style={{ paddingTop: 40, paddingRight: 40 }} className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <div style={{ paddingTop: 40, paddingRight: 40 }} className="col-xs-12 col-sm-5 col-md-5 col-lg-5">
 
                             <OrderListProduct />
                         </div>
-                        <div style={{ paddingLeft: 40, paddingRight: 40 }} className="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <div style={{ paddingLeft: 40, paddingRight: 40 }} className="col-xs-12 col-sm-7 col-md-7 col-lg-7">
                             <OrderInformation />
                         </div>
                     </div>

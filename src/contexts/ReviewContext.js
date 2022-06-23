@@ -41,10 +41,14 @@ const ReviewContextProvider = ({ children }) => {
 
 
     const deleteReview = async reviewId => {
+        console.log(reviewId)
         try {
             const response = await axios.delete(`${apiUrl}/review/${reviewId}`)
-            if (response.data.success)
+            if (response.data.success) {
                 dispatch({ type: 'DELETE_REVIEW', payload: reviewId })
+                console.log(response.data)
+                return response.data.success
+            }
         } catch (error) {
             console.log(error)
         }

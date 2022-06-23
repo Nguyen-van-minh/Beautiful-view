@@ -36,7 +36,7 @@ const Home = () => {
                     <HeroSlider
                         data={sliders}
                         control={true}
-                        auto={false}
+                        auto={true}
                         timeOut={5000}
                     />
                     {/* policy section */}

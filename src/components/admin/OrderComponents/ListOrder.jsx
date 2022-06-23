@@ -81,6 +81,7 @@ const ListOrder = () => {
     const handleDeleteOrder = (id) => {
         if (window.confirm('Bạn muốn xóa đơn này!')) {
             deleteOrder(id)
+            setValue(4)
         }
     }
 

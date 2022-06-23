@@ -30,7 +30,6 @@ const CategoryContextProvider = ({ children }) => {
     const addCategory = async newCategory => {
         try {
             const response = await axios.post(`${apiUrl}/category/addCategory`, newCategory)
-            console.log(newCategory)
             if (response.data.success) {
                 dispatch({ type: 'CATEGORY_ADD_SUCCESS', payload: response.data.category })
                 return response.data

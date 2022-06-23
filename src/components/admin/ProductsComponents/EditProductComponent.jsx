@@ -322,9 +322,9 @@ const EditProductComponent = () => {
                             >
                                 {
                                     images && images.map((item, index) => (
-                                        <div key={index}>
+                                        <div key={index} >
                                             <img src={item.image} alt='' onClick={() => openPreviewImage(item.image)} width="45%" height="80%" />
-                                            <Button onClick={deleteImage.bind(this, item._id)} type="primary" danger ghost>delete</Button>
+                                            <Button style={{ marginLeft: '10px' }} onClick={deleteImage.bind(this, item._id)} type="primary" danger ghost>delete</Button>
                                         </div>
                                     )
                                     )

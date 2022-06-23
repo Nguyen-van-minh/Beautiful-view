@@ -14,7 +14,7 @@ import ModalEditPassword from '../../components/customer/ModalEditPassword'
 
 const Personal = () => {
 
-    const { OrderState: { orders }, getAllOrder, findOrder, updateOrder } = useContext(OrderContext)
+    const { OrderState: { orders }, getAllOrder, findOrder, updateOrder, deleteOrder } = useContext(OrderContext)
     const { authState: { user } } = useContext(AuthContext)
     const [filterOrder, setFilterOrder] = useState([])
     const [value, setValue] = useState(4);
@@ -92,6 +92,13 @@ const Personal = () => {
         setCurentPage(page)
     }
 
+    const handleDeleteOrder = (id) => {
+        if (window.confirm('Bạn muốn xóa đơn này!')) {
+            deleteOrder(id)
+            setValue(4)
+        }
+    }
+
     return (
         <>
             <Header />
@@ -157,7 +164,11 @@ const Personal = () => {
                                                     {(currentPage * perLoad - perLoad) + (index + 1)}
                                                 </td>
                                                 <td>
-                                                    {item.payType === "PayPal" ? <span style={{ color: "#00d100" }}>payPal - Đã thanh toán</span> : <span style={{ color: 'orange' }}>Thanh toán khi nhận hàng</span>}
+                                                    {item.payType === "PayPal" || item.payType === "VNPAY"
+                                                        ?
+                                                        <span style={{ color: "#00d100" }}>{item.payType} - Đã thanh toán</span>
+                                                        :
+                                                        <span style={{ color: 'orange' }}>Thanh toán khi nhận hàng</span>}
                                                 </td>
                                                 <td>
                                                     {moment(item.createdAt).format('DD/MM/YY h:mm')}
@@ -184,6 +195,12 @@ const Personal = () => {
                                                         </td>
                                                         :
                                                         <td>
+                                                            {
+                                                                item.state === 3 &&
+                                                                <Button onClick={() => handleDeleteOrder(item._id)} type="danger">
+                                                                    Xóa
+                                                                </Button>
+                                                            }
 
                                                         </td>
                                                 }

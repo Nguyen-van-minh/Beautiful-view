@@ -94,10 +94,17 @@ const OrderContextProvider = ({ children }) => {
     }
 
 
+    const VNPAY = async data => {
+        console.log(data)
+        const response = await axios.post(`${apiUrl}/vnpay`, data)
+        return response.data
+    }
+
+
 
 
     //tContextData
-    const cartContextData = { OrderState, getAllOrder, addOrder, deleteOrder, updateOrder, getAll, findOrder, setItem, updateProductWhenOrder }
+    const cartContextData = { OrderState, getAllOrder, addOrder, deleteOrder, updateOrder, getAll, findOrder, setItem, updateProductWhenOrder, VNPAY }
     return (
         <OrderContext.Provider value={cartContextData}>
             {children}
