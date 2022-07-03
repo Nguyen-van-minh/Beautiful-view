@@ -7,7 +7,8 @@ import { Input, Button } from 'antd';
 import { useHistory } from 'react-router';
 import UserLocation from "./UserLocation";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import numberWithCommas from '../../utils/numberWithCommas'
+import numberWithCommas from '../../utils/numberWithCommas';
+import axios from 'axios';
 
 const OneOrderInformation = () => {
     const { authState: { user } } = useContext(AuthContext)
@@ -98,6 +99,7 @@ const OneOrderInformation = () => {
     }, [districtId])
 
     useEffect(() => {
+
         if (wardsId !== null) {
             let name = wards[wardsId.value].label
             setNewOrder({ ...newOrder, Address: [a, b, name] })
@@ -106,6 +108,10 @@ const OneOrderInformation = () => {
 
     const { userName, position, phoneNumber, description, Address } = newOrder
     const onChangeNewOrder = event => setNewOrder({ ...newOrder, [event.target.name]: event.target.value })
+
+    useEffect(() => {
+        setValidate(false)
+    }, [userName, position, phoneNumber, description, cityId, districtId, wardsId])
 
     const check = () => {
         if (userName === "") {
@@ -143,6 +149,14 @@ const OneOrderInformation = () => {
         event.preventDefault()
         const { success } = await addOrder(newOrder)
         await updateProductWhenOrder({ listId: [item.productId], listQuantity: [item.quantity] })
+        await axios.post(`http://localhost:5000/api/email`, {
+            email: user.email,
+            subject: "Đặt hàng thành công",
+            message: `Xin chào ${user.username}. 
+            Đơn hàng của bạn đã đặt thành công. Bạn sẽ nhận được hàng trong vòng 2 - 3 ngày tới, 
+            bạn vui lòng theo dõi tình trạng đơn hàng. 
+            Cảm ơn bạn đã ủng hộ Beautiful`,
+        })
         if (success && newOrder.payType === "VNPAY") {
             const data = await VNPAY({ total: newOrder.total })
             window.location.href = data.data
@@ -202,7 +216,13 @@ const OneOrderInformation = () => {
                             name="city"
                             placeholder="Chọn Tỉnh/Thành"
                             key={city?.value}
-                            onChange={(e) => setCityId(e.value)}
+                            onChange={(e) => setCityId((pre) => {
+                                if (pre !== e.value) {
+                                    setNewOrder({ ...newOrder, Address: [] })
+                                    setCityId(e.value)
+                                }
+                                setCityId(e.value)
+                            })}
                             options={city ? city : []}
                         />
                         <br />

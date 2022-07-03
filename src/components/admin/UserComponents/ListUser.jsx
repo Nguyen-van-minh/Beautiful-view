@@ -14,7 +14,7 @@ const UserList = () => {
     }, [])
 
     const handleDeleteUser = (id) => {
-        if (window.confirm('Bạn muốn xóa đơn này!')) {
+        if (window.confirm('Bạn muốn xóa tài khoản này?')) {
             deleteUser(id)
         }
     }

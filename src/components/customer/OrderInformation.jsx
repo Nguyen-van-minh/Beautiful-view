@@ -8,7 +8,8 @@ import { Button, Input } from 'antd';
 import { useHistory } from 'react-router';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import UserLocation from "./UserLocation";
-import numberWithCommas from '../../utils/numberWithCommas'
+import numberWithCommas from '../../utils/numberWithCommas';
+import axios from 'axios';
 
 const OrderInformation = () => {
     const { CartState: { items }, getAllItem, deleteAllItems } = useContext(CartContext)
@@ -119,6 +120,10 @@ const OrderInformation = () => {
     const { userName, position, phoneNumber, description, Address } = newOrder
     const onChangeNewOrder = event => setNewOrder({ ...newOrder, [event.target.name]: event.target.value })
 
+    useEffect(() => {
+        setValidate(false)
+    }, [userName, position, phoneNumber, description, cityId, districtId, wardsId])
+
     const check = () => {
         if (userName === "") {
             alert('Vui lòng nhập tên người nhận!')
@@ -155,6 +160,14 @@ const OrderInformation = () => {
         event.preventDefault()
         const { success } = await addOrder(newOrder)
         await updateProductWhenOrder({ listId: newOrder.listProductId, listQuantity: newOrder.quantityProduct })
+        await axios.post(`http://localhost:5000/api/email`, {
+            email: user.email,
+            subject: "Đặt hàng thành công",
+            message: `Xin chào ${user.username}. 
+            Đơn hàng của bạn đã đặt thành công. Bạn sẽ nhận được hàng trong vòng 2 - 3 ngày tới, 
+            bạn vui lòng theo dõi tình trạng đơn hàng. 
+            Cảm ơn bạn đã ủng hộ Beautiful`,
+        })
         if (success && newOrder.payType === "VNPAY") {
             const data = await VNPAY({ total: newOrder.total })
             window.location.href = data.data
@@ -216,7 +229,13 @@ const OrderInformation = () => {
                             name="city"
                             placeholder="Chọn Tỉnh/Thành"
                             key={city?.value}
-                            onChange={(e) => setCityId(e.value)}
+                            onChange={(e) => setCityId((pre) => {
+                                if (pre !== e.value) {
+                                    setNewOrder({ ...newOrder, Address: [] })
+                                    setCityId(e.value)
+                                }
+                                setCityId(e.value)
+                            })}
                             options={city ? city : []}
                         />
                         <br />

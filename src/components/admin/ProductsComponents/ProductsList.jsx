@@ -47,7 +47,7 @@ const ProductsList = () => {
 
 
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn muốn xóa sản phẩm mục này?')) {
+        if (window.confirm('Bạn muốn xóa sản phẩm này?')) {
             setLoading(true)
             const { success } = await deleteProduct(id)
             if (success) {
