@@ -149,7 +149,7 @@ const OneOrderInformation = () => {
         event.preventDefault()
         const { success } = await addOrder(newOrder)
         await updateProductWhenOrder({ listId: [item.productId], listQuantity: [item.quantity] })
-        await axios.post(`http://localhost:5000/api/email`, {
+        await axios.post(`https://server-shop-done.herokuapp.com/api/email`, {
             email: user.email,
             subject: "Đặt hàng thành công",
             message: `Xin chào ${user.username}. 
