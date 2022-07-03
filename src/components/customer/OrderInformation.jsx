@@ -160,14 +160,7 @@ const OrderInformation = () => {
         event.preventDefault()
         const { success } = await addOrder(newOrder)
         await updateProductWhenOrder({ listId: newOrder.listProductId, listQuantity: newOrder.quantityProduct })
-        await axios.post(`https://server-shop-done.herokuapp.com/api/email`, {
-            email: user.email,
-            subject: "Đặt hàng thành công",
-            message: `Xin chào ${user.username}. 
-            Đơn hàng của bạn đã đặt thành công. Bạn sẽ nhận được hàng trong vòng 2 - 3 ngày tới, 
-            bạn vui lòng theo dõi tình trạng đơn hàng. 
-            Cảm ơn bạn đã ủng hộ Beautiful`,
-        })
+
         if (success && newOrder.payType === "VNPAY") {
             const data = await VNPAY({ total: newOrder.total })
             window.location.href = data.data
